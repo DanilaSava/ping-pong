@@ -9,7 +9,7 @@ window = display.set_mode((700, 393))
 
 
 clock = time.Clock()
-FPS = 60
+FPS = 120
 
 
 
@@ -61,29 +61,25 @@ class Player(GameSprite):
 
 
 
-class Enemy(GameSprite):
-    def update(self):
-        self.rect.y += self.speed
-        global lost
-        if self.rect.y >= 510:
-            self.rect.x = randint(0, 600)
-            self.rect.y = -20
-            lost = lost + 1
-
-
 
 
 ball = GameSprite("ball.png", 50, 50, 7, 340, 163)
 
-player1 = Player("player1.png", 40, 150, 10, 0, 163)
-player2 = Player("player2.png", 55, 150, 10, 660, 163)
+player1 = Player("player1.png", 40, 150, 2, 0, 163)
+player2 = Player("player2.png", 55, 150, 2, 660, 163)
 
 
 game = True
 
 finish = False
-speed_x = 3
-speed_y = 3
+
+
+
+speed_x = 2
+speed_y = 2
+
+
+
 schetP1 = 0
 schetP2 = 0
 
@@ -97,6 +93,7 @@ while game:
     for e in event.get():
         if e.type == QUIT:
             game = False
+        
         
 
 
@@ -126,17 +123,25 @@ while game:
     if ball.rect.y > 343 or ball.rect.y < 0:
         speed_y *= -1
 
+
+
     if sprite.collide_rect(player1, ball) or sprite.collide_rect(player2, ball):
         speed_x *= -1
+      
 
 
-    if ball.rect.x < 0:
+
+    if ball.rect.x < -50:
         schetP2 += 1
+        ball.kill()
         ball = GameSprite("ball.png", 50, 50, 7, 340, 163)
+
     
-    if ball.rect.x > 750:
+    if ball.rect.x > 800:
         schetP1 += 1
+        ball.kill()
         ball = GameSprite("ball.png", 50, 50, 7, 340, 163)
+
 
     if schetP1 > 2:
         window.blit(win1, (230, 180))
@@ -148,8 +153,13 @@ while game:
 
 
 
+
+
+
     clock.tick(FPS)
     display.update()
+
+    
 
     
 
